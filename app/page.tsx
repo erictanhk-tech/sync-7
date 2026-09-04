@@ -49,6 +49,11 @@ type Question = {
   prompt: string;
   choices: Choice[];
 };
+type TutorialNote = {
+  strengths: [string, string, string];
+  stretch: string;
+  principle: string;
+};
 type Day = {
   number: number;
   title: string;
@@ -500,6 +505,149 @@ const days: Day[] = [
   },
 ];
 
+const tutorialNotes: TutorialNote[][] = [
+  [
+    {
+      strengths: [
+        'You respected the director’s emotional attachment and responded with urgency.',
+        'You translated taste into a usable brief and protected your leverage with credible alternatives.',
+        'You recognized that exact timing and legal coordination affect whether the cue can deliver.',
+      ],
+      stretch: 'Make the brief deal-ready by adding ownership leads, asset needs, approval gates, a budget ceiling and a written response deadline.',
+      principle: 'Do not present attachment as certainty until creative fit, rights, price, assets and schedule all line up.',
+    },
+    {
+      strengths: [
+        'You protected the director’s strongest creative idea instead of diluting the brief too early.',
+        'You balanced creative strength with one-stop control, clean assets and a firm quote window.',
+        'You kept cost discipline in the decision instead of treating budget as an afterthought.',
+      ],
+      stretch: 'Present every finalist with a creative case, a clearability status, a price signal, an answer date and a ready fallback.',
+      principle: 'A professional shortlist is a decision tool—not just a playlist.',
+    },
+  ],
+  [
+    {
+      strengths: [
+        'You identified both copyright assets and the need to cover the full composition.',
+        'You correctly began with the owner of the specific recording being used.',
+        'You remembered that broadcast exploitation can also involve performance licensing.',
+      ],
+      stretch: 'Also verify samples, featured-artist approvals, restrictions, representation authority and the exact recording identifier.',
+      principle: 'Picture use of an existing recording normally requires both master-use and synchronization permission.',
+    },
+    {
+      strengths: [
+        'You tracked the approvals quantitatively and noticed that most of the composition was already cleared.',
+        'You kept the missing share and a replacement cue active at the same time.',
+        'You looked for contractual risk allocation instead of ignoring the unresolved share.',
+      ],
+      stretch: 'Log the writer’s share, administrator, approval authority, terms and written evidence before marking publishing complete.',
+      principle: 'A partial approval does not grant rights controlled by the missing share.',
+    },
+  ],
+  [
+    {
+      strengths: [
+        'You anticipated that the brand may want broad future flexibility.',
+        'You matched the initial rights package to the funded media plan and preserved expansion through options.',
+        'You limited the term and left room for the agency to refine its platform plan.',
+      ],
+      stretch: 'Attach the exact spots, cutdowns, paid placements, organic archive, exclusivity category and option prices to the request.',
+      principle: 'Rights holders can price accurately only when context, media, territory, term and versions are concrete.',
+    },
+    {
+      strengths: [
+        'You protected the funded launch while turning worldwide expansion into a separate business choice.',
+        'You recognized the operational reality that online media can cross borders.',
+        'You prioritized launch speed and tried to solve the budget gap after trafficking.',
+      ],
+      stretch: 'Give the client two written paths: the funded launch scope and a time-limited, pre-priced territorial expansion.',
+      principle: 'When money and ambition diverge, reshape scope before taking legal or budget risk.',
+    },
+  ],
+  [
+    {
+      strengths: [
+        'You separated ownership from permission and challenged an ambiguous commercial shorthand.',
+        'You recognized that the client wants price certainty and freedom from repeat negotiations.',
+        'You tried to keep production moving instead of stalling over terminology.',
+      ],
+      stretch: 'Translate the business goal into exact rights: license or assignment, permitted uses, term, territory, exclusivity, royalties and reversions.',
+      principle: '“Buyout” has no reliable meaning until the contract defines ownership and exploitation rights.',
+    },
+    {
+      strengths: [
+        'You connected production funding with an expectation of control over the new recording.',
+        'You mapped ownership, producer terms, performers, splits, samples and delivery as separate chain-of-title tasks.',
+        'You recognized that both the new recording and the underlying song matter to the final exploitation.',
+      ],
+      stretch: 'Close every contributor agreement before delivery and record who owns the master, who is paid royalties and who retains approvals.',
+      principle: 'Paying for a session does not replace signed ownership, performer, producer or composition paperwork.',
+    },
+  ],
+  [
+    {
+      strengths: [
+        'You kept master and aggregate publishing inside one authorized all-in ceiling.',
+        'You surfaced the total budget so the parties could see the commercial constraint.',
+        'You protected the priority recording and tested whether publishing had flexibility.',
+      ],
+      stretch: 'State each offer’s side basis, aggregate publishing amount, pro-rata treatment, taxes, payment timing and precise MFN trigger.',
+      principle: 'A publishing quote must say whether it is aggregate, pro rata and calculated on a 100% basis.',
+    },
+    {
+      strengths: [
+        'You protected the creative priority and looked for a way to close the must-have song.',
+        'You negotiated with scope, timing and a live alternative while respecting spending authority.',
+        'You understood that credible comparative information can create negotiating leverage.',
+      ],
+      stretch: 'Put the final counter, expiration time, offered concessions and walk-away alternative in writing for every side.',
+      principle: 'Negotiate with truthful leverage and tradeable scope—never with unauthorized money or invented quotes.',
+    },
+  ],
+  [
+    {
+      strengths: [
+        'You separated core game use from trailer, creator, OST, sequel, DLC and extension value.',
+        'You recognized that the request belongs to one connected interactive ecosystem.',
+        'You remembered that platform arrangements can affect music economics and administration.',
+      ],
+      stretch: 'Define platforms, recurrence, capture, edits, marketing channels, asset delivery and separately priced options in the same rights grid.',
+      principle: 'Name every value bucket; do not assume “interactive” silently includes marketing, soundtracks or future titles.',
+    },
+    {
+      strengths: [
+        'You focused on giving creators predictable, claim-free campaign participation.',
+        'You converted a platform restriction into an operational workflow with a fallback.',
+        'You protected schedule and audience experience by keeping replacement available.',
+      ],
+      stretch: 'Document eligible channels, asset IDs, submission lead time, response SLA, escalation contacts and streamer-mode behavior.',
+      principle: 'Digital rights work only when the contract is paired with a testable operating procedure.',
+    },
+  ],
+  [
+    {
+      strengths: [
+        'You acknowledged the real delivery pressure and tried to avoid losing the launch window.',
+        'You required written master and full publishing evidence matched to the final edit and context.',
+        'You checked whether cue duration might change the clearance analysis.',
+      ],
+      stretch: 'Use a go/no-go checklist naming every approval, the accepted evidence, the final asset and the person authorized to release traffic.',
+      principle: 'Deadlines and short duration may affect leverage or price, but they do not replace permission.',
+    },
+    {
+      strengths: [
+        'You centered executed licenses as the foundation of the delivery file.',
+        'You built an audit-ready package spanning rights, money, assets, metadata, restrictions and future dates.',
+        'You remembered that the cue record must be updated when the final song changes.',
+      ],
+      stretch: 'Reconcile the signed scope against the exact final cut, then calendar expiries, options, reporting and payment obligations.',
+      principle: 'A deal is closed only when permission, payment, assets, metadata and the final use all agree.',
+    },
+  ],
+];
+
 const emptyProgress: ProgressState = {
   answers: {},
   cursors: {},
@@ -571,6 +719,10 @@ export default function Home() {
   const complete = progress.completed.includes(day.number);
   const question = day.questions[cursor];
   const selectedChoice = answered ? question.choices[selectedIndex] : null;
+  const tutorial = selectedChoice && selectedIndex !== undefined
+    ? tutorialNotes[day.number - 1]?.[cursor]
+    : null;
+  const strongestChoice = question.choices.reduce((best, choice) => choice.score > best.score ? choice : best);
   const coursePercent = Math.round((progress.completed.length / days.length) * 100);
 
   const overallScore = useMemo(() => {
@@ -736,6 +888,10 @@ export default function Home() {
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Your call</p>
                       <p className="mt-1 font-medium leading-snug">{question.prompt}</p>
+                      <p className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <BookOpenText aria-hidden="true" className="size-3.5 text-primary" />
+                        Every choice unlocks a bite-size tutorial note.
+                      </p>
                     </div>
                     <fieldset className="space-y-2">
                       <legend className="sr-only">Choose your response</legend>
@@ -759,9 +915,9 @@ export default function Home() {
                         </Button>
                       ))}
                     </fieldset>
-                    {selectedChoice && (
+                    {selectedChoice && tutorial && selectedIndex !== undefined && (
                       <output className={cn(
-                        'rounded-xl border p-3',
+                        'rounded-xl border p-3.5',
                         selectedChoice.score >= 8 ? 'border-accent bg-accent/45' : 'border-primary/25 bg-primary/5',
                       )} aria-live="polite">
                         <div className="flex items-start gap-2.5">
@@ -771,9 +927,29 @@ export default function Home() {
                           <div>
                             <p className="text-sm font-semibold">{selectedChoice.score}/10 • {scoreLabel(selectedChoice.score * 10)}</p>
                             <p className="mt-1 text-sm leading-relaxed">{selectedChoice.feedback}</p>
-                            <p className="mt-2 text-xs italic text-muted-foreground">{selectedChoice.reply}</p>
                           </div>
                         </div>
+                        <section aria-label="Tutorial notes" className="mt-3 space-y-3 rounded-lg border border-foreground/8 bg-background/72 p-3">
+                          <div>
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-accent-foreground">What you did right</p>
+                            <p className="mt-1 text-sm leading-relaxed">{tutorial.strengths[selectedIndex]}</p>
+                          </div>
+                          <div>
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-primary">
+                              {selectedChoice.score >= 8 ? 'How to sharpen it' : 'Where to improve'}
+                            </p>
+                            <p className="mt-1 text-sm leading-relaxed">
+                              {selectedChoice.score >= 8
+                                ? tutorial.stretch
+                                : <>A stronger move is: “{strongestChoice.label}” {tutorial.stretch}</>}
+                            </p>
+                          </div>
+                          <div className="border-t border-foreground/8 pt-3">
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Deal-room rule</p>
+                            <p className="mt-1 text-sm font-medium leading-relaxed">{tutorial.principle}</p>
+                          </div>
+                        </section>
+                        <p className="mt-3 text-xs italic leading-relaxed text-muted-foreground">Counterparty reaction: {selectedChoice.reply}</p>
                       </output>
                     )}
                     <Button type="button" size="lg" className="h-12 w-full" disabled={!answered} onClick={advance}>
