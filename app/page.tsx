@@ -762,9 +762,14 @@ export default function Home() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  function openView(nextView: View) {
+    setView(nextView);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   function nextDay() {
     if (day.number < days.length) openDay(day.number + 1);
-    else setView('week');
+    else openView('week');
   }
 
   async function copyRequest() {
@@ -798,45 +803,48 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-dvh bg-background pb-28 text-foreground sm:px-6 sm:pb-12">
-      <div className="mx-auto w-full max-w-xl">
-        <header className="sticky top-0 z-20 flex items-center justify-between border-b border-border/60 bg-background/88 px-4 py-4 backdrop-blur-xl sm:static sm:border-0 sm:bg-transparent sm:px-0 sm:py-5">
-          <button type="button" className="flex items-center gap-2.5 text-left" onClick={() => setView('today')} aria-label="Go to today's lesson">
-            <span className="grid size-9 place-items-center rounded-xl bg-primary text-primary-foreground shadow-sm">
+    <main className="relative isolate min-h-dvh overflow-x-hidden pb-32 text-foreground sm:px-6 sm:pb-36">
+      <div aria-hidden="true" className="pointer-events-none fixed -left-24 top-24 -z-10 size-72 rounded-full bg-primary/9 blur-3xl" />
+      <div aria-hidden="true" className="pointer-events-none fixed -right-28 top-[34rem] -z-10 size-80 rounded-full bg-accent/40 blur-3xl" />
+      <div className="mx-auto w-full max-w-2xl">
+        <header className="soul-glass sticky top-3 z-20 mx-3 flex items-center justify-between rounded-full border border-white/55 px-2.5 py-2 ring-1 ring-foreground/6 sm:mx-0 sm:top-4">
+          <button type="button" className="flex items-center gap-2.5 text-left" onClick={() => openView('today')} aria-label="Go to today's lesson">
+            <span className="grid size-9 place-items-center rounded-full bg-foreground text-background shadow-sm ring-1 ring-white/15">
               <Headphones aria-hidden="true" className="size-4" />
             </span>
             <span>
-              <span className="block font-heading text-sm font-semibold tracking-tight">SYNC / 7</span>
-              <span className="block text-xs text-muted-foreground">Music deal training</span>
+              <span className="block font-heading text-sm font-semibold tracking-[-0.02em]">SYNC / 7</span>
+              <span className="block text-[11px] text-muted-foreground">Make the call</span>
             </span>
           </button>
           <div className="flex items-center gap-2">
-            {overallScore !== null && <Badge variant="secondary">{overallScore}% avg</Badge>}
-            <Button type="button" variant="ghost" size="icon" aria-label="Share this app" onClick={shareApp}>
+            {overallScore !== null && <Badge variant="secondary" className="h-7 px-2.5">{overallScore}% avg</Badge>}
+            <Button type="button" variant="ghost" size="icon" className="rounded-full" aria-label="Share this app" onClick={shareApp}>
               {shared ? <Check aria-hidden="true" /> : <Share2 aria-hidden="true" />}
             </Button>
           </div>
         </header>
 
         {view === 'today' && (
-          <section aria-labelledby="today-title" className="space-y-4 px-4 pt-5 sm:px-0">
-            <div className="space-y-3">
+          <section key={`${day.number}-${cursor}`} aria-labelledby="today-title" className="soul-rise space-y-5 px-4 pt-8 sm:px-0 sm:pt-11">
+            <div className="space-y-4">
               <div className="flex items-end justify-between gap-4">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">Day {day.number} of 7 • {day.field}</p>
-                  <h1 id="today-title" className="mt-1 font-heading text-3xl font-semibold tracking-[-0.035em]">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.19em] text-primary">Day {day.number} of 7 · {day.field}</p>
+                  <h1 id="today-title" className="mt-2 max-w-[12ch] font-heading text-[2.55rem] font-semibold leading-[0.94] tracking-[-0.055em] sm:text-6xl">
                     {day.title}
                   </h1>
+                  <p className="mt-3 text-sm text-muted-foreground">One sharp decision. Real-world consequences.</p>
                 </div>
-                <Badge variant="secondary" className="gap-1.5">
+                <Badge variant="secondary" className="h-8 gap-1.5 rounded-full px-3 shadow-sm">
                   <Clock3 aria-hidden="true" className="size-3" /> {day.minutes} min
                 </Badge>
               </div>
               <div className="flex items-center gap-3">
-                <Progress value={coursePercent} aria-label="Seven-day course progress" className="flex-1" />
-                <span className="text-xs font-semibold tabular-nums">{coursePercent}%</span>
+                <Progress value={coursePercent} aria-label="Seven-day course progress" className="flex-1 [&_[data-slot=progress-track]]:h-1.5 [&_[data-slot=progress-track]]:bg-foreground/8 [&_[data-slot=progress-indicator]]:bg-foreground" />
+                <span className="text-[11px] font-semibold tabular-nums text-muted-foreground">{coursePercent}%</span>
               </div>
-              <div className="grid grid-cols-7 gap-1.5" aria-label="Seven-day course map">
+              <div className="grid grid-cols-7 gap-1.5 rounded-full bg-foreground/[0.045] p-1.5 ring-1 ring-foreground/5" aria-label="Seven-day course map">
                 {days.map((item) => {
                   const isCurrent = item.number === day.number;
                   const isDone = progress.completed.includes(item.number);
@@ -848,10 +856,10 @@ export default function Home() {
                       aria-label={'Open day ' + item.number + ': ' + item.title}
                       aria-current={isCurrent ? 'step' : undefined}
                       className={cn(
-                        'grid h-9 place-items-center rounded-lg text-xs font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
-                        isCurrent && 'bg-primary text-primary-foreground',
+                        'grid h-9 place-items-center rounded-full text-xs font-semibold transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+                        isCurrent && 'bg-foreground text-background shadow-md',
                         !isCurrent && isDone && 'bg-accent text-accent-foreground',
-                        !isCurrent && !isDone && 'bg-muted text-muted-foreground hover:bg-secondary',
+                        !isCurrent && !isDone && 'text-muted-foreground hover:bg-card hover:text-foreground hover:shadow-sm',
                       )}
                     >
                       {isDone ? <Check aria-hidden="true" className="size-3.5" /> : item.number}
@@ -863,31 +871,31 @@ export default function Home() {
 
             {!complete ? (
               <>
-                <Card className="border-0 shadow-[0_18px_50px_-28px_oklch(0.29_0.07_42/0.45)] ring-border">
+                <Card className="soul-card rounded-[2rem] border border-white/65 bg-card/88 ring-1 ring-foreground/7 backdrop-blur-xl [--card-spacing:--spacing(5)]">
                   <CardHeader>
                     <div className="flex flex-wrap items-center gap-2">
-                      <Badge variant="outline">{day.field}</Badge>
-                      <Badge variant="secondary">Challenge {cursor + 1} / {day.questions.length}</Badge>
+                      <Badge variant="outline" className="rounded-full border-foreground/10 bg-background/70">{day.field}</Badge>
+                      <Badge variant="secondary" className="rounded-full">Challenge {cursor + 1} / {day.questions.length}</Badge>
                     </div>
-                    <CardTitle className="text-xl">{question.gate}</CardTitle>
-                    <CardDescription>{day.brief}</CardDescription>
+                    <CardTitle className="pt-1 text-2xl font-semibold tracking-[-0.035em]">{question.gate}</CardTitle>
+                    <CardDescription className="max-w-[52ch] text-[15px] leading-relaxed">{day.brief}</CardDescription>
                     <CardAction>
-                      <span className="grid size-9 place-items-center rounded-full bg-accent text-accent-foreground">
+                      <span className="grid size-10 place-items-center rounded-full bg-[linear-gradient(145deg,var(--accent),color-mix(in_oklch,var(--accent),white_55%))] text-accent-foreground shadow-[0_10px_24px_-14px_var(--accent-foreground)] ring-1 ring-white/70">
                         <LockKeyhole aria-hidden="true" className="size-4" />
                       </span>
                     </CardAction>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="rounded-xl bg-muted/70 p-3">
-                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Know this first</p>
-                      <p className="mt-1 text-sm leading-relaxed">{day.concept}</p>
+                  <CardContent className="space-y-5">
+                    <div className="rounded-2xl bg-foreground px-4 py-4 text-background shadow-[0_18px_38px_-26px_var(--foreground)]">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-background/55">The principle</p>
+                      <p className="mt-1.5 text-[15px] font-medium leading-relaxed tracking-[-0.01em]">{day.concept}</p>
                     </div>
                     <div className="flex flex-wrap gap-1.5">
-                      {day.facts.map((fact) => <Badge key={fact} variant="outline">{fact}</Badge>)}
+                      {day.facts.map((fact) => <Badge key={fact} variant="outline" className="h-6 rounded-full border-foreground/10 bg-background/60 px-2.5 text-[11px]">{fact}</Badge>)}
                     </div>
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Your call</p>
-                      <p className="mt-1 font-medium leading-snug">{question.prompt}</p>
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">Your call</p>
+                      <p className="mt-1.5 text-lg font-semibold leading-snug tracking-[-0.025em]">{question.prompt}</p>
                       <p className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground">
                         <BookOpenText aria-hidden="true" className="size-3.5 text-primary" />
                         Every choice unlocks a bite-size tutorial note.
@@ -901,14 +909,16 @@ export default function Home() {
                           type="button"
                           variant={answered && selectedIndex === index ? 'secondary' : 'outline'}
                           className={cn(
-                            'h-auto min-h-12 w-full justify-start whitespace-normal px-3 py-3 text-left leading-snug',
+                            'h-auto min-h-14 w-full justify-start whitespace-normal rounded-2xl border-foreground/10 bg-background/65 px-3.5 py-3.5 text-left leading-snug shadow-[0_8px_24px_-24px_var(--foreground)] transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground/20 hover:bg-card hover:shadow-md',
+                            answered && selectedIndex === index && choice.score >= 8 && 'border-accent-foreground/16 bg-accent/55 shadow-none',
+                            answered && selectedIndex === index && choice.score < 8 && 'border-primary/20 bg-primary/8 shadow-none',
                             answered && selectedIndex !== index && 'opacity-55',
                           )}
                           onClick={() => choose(index)}
                           disabled={answered}
                           aria-pressed={selectedIndex === index}
                         >
-                          <span className="mr-1 grid size-6 shrink-0 place-items-center rounded-full border border-current/20 text-xs">
+                          <span className="mr-1 grid size-7 shrink-0 place-items-center rounded-full bg-foreground/6 text-[11px] font-semibold ring-1 ring-foreground/8">
                             {String.fromCharCode(65 + index)}
                           </span>
                           {choice.label}
@@ -917,8 +927,8 @@ export default function Home() {
                     </fieldset>
                     {selectedChoice && tutorial && selectedIndex !== undefined && (
                       <output className={cn(
-                        'rounded-xl border p-3.5',
-                        selectedChoice.score >= 8 ? 'border-accent bg-accent/45' : 'border-primary/25 bg-primary/5',
+                        'soul-rise rounded-[1.6rem] border p-4',
+                        selectedChoice.score >= 8 ? 'border-accent-foreground/12 bg-accent/46' : 'border-primary/18 bg-primary/[0.055]',
                       )} aria-live="polite">
                         <div className="flex items-start gap-2.5">
                           {selectedChoice.score >= 8
@@ -929,7 +939,7 @@ export default function Home() {
                             <p className="mt-1 text-sm leading-relaxed">{selectedChoice.feedback}</p>
                           </div>
                         </div>
-                        <section aria-label="Tutorial notes" className="mt-3 space-y-3 rounded-lg border border-foreground/8 bg-background/72 p-3">
+                        <section aria-label="Tutorial notes" className="mt-4 space-y-4 rounded-[1.2rem] border border-white/65 bg-card/78 p-4 shadow-sm backdrop-blur-lg">
                           <div>
                             <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-accent-foreground">What you did right</p>
                             <p className="mt-1 text-sm leading-relaxed">{tutorial.strengths[selectedIndex]}</p>
@@ -952,44 +962,44 @@ export default function Home() {
                         <p className="mt-3 text-xs italic leading-relaxed text-muted-foreground">Counterparty reaction: {selectedChoice.reply}</p>
                       </output>
                     )}
-                    <Button type="button" size="lg" className="h-12 w-full" disabled={!answered} onClick={advance}>
+                    <Button type="button" size="lg" className="h-13 w-full rounded-full bg-foreground text-background shadow-[0_18px_34px_-20px_var(--foreground)] hover:bg-foreground/88" disabled={!answered} onClick={advance}>
                       {cursor === day.questions.length - 1 ? 'Finish day' : 'Next challenge'}
                       <ArrowRight data-icon="inline-end" aria-hidden="true" />
                     </Button>
                   </CardContent>
                 </Card>
                 {day.number > 1 && (
-                  <Button type="button" variant="ghost" className="w-full" onClick={() => openDay(day.number - 1)}>
+                  <Button type="button" variant="ghost" className="h-11 w-full rounded-full text-muted-foreground" onClick={() => openDay(day.number - 1)}>
                     <ArrowLeft data-icon="inline-start" aria-hidden="true" /> Previous day
                   </Button>
                 )}
               </>
             ) : (
-              <Card className="overflow-visible border-0 bg-foreground text-background shadow-[0_22px_60px_-30px_oklch(0.18_0.03_48/0.65)] ring-0">
+              <Card className="soul-card overflow-visible rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_80%_0%,color-mix(in_oklch,var(--primary),transparent_60%),transparent_45%),var(--foreground)] text-background ring-0 [--card-spacing:--spacing(5)]">
                 <CardHeader>
-                  <Badge className="bg-accent text-accent-foreground">Day cleared</Badge>
-                  <CardTitle className="font-heading text-2xl text-background">
+                  <Badge className="h-6 rounded-full bg-accent text-accent-foreground">Day cleared</Badge>
+                  <CardTitle className="pt-1 font-heading text-3xl font-semibold tracking-[-0.045em] text-background">
                     {scoreForDay(day, progress)}% • {scoreLabel(scoreForDay(day, progress))}
                   </CardTitle>
-                  <CardDescription className="text-background/68">Put these three moves in your pocket.</CardDescription>
+                  <CardDescription className="text-background/62">Three instincts to carry into the next room.</CardDescription>
                   <CardAction>
-                    <span className="grid size-10 place-items-center rounded-full bg-primary text-primary-foreground">
+                    <span className="grid size-11 place-items-center rounded-full bg-primary text-primary-foreground shadow-lg ring-1 ring-white/15">
                       <Check aria-hidden="true" className="size-5" />
                     </span>
                   </CardAction>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-3">
+                  <ul className="space-y-2.5">
                     {day.takeaway.map((item) => (
-                      <li key={item} className="flex gap-2.5 text-sm leading-relaxed">
+                      <li key={item} className="flex gap-3 rounded-2xl bg-white/[0.065] px-3.5 py-3 text-sm leading-relaxed ring-1 ring-white/[0.075]">
                         <CheckCircle2 aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-accent" />
                         {item}
                       </li>
                     ))}
                   </ul>
                 </CardContent>
-                <CardFooter className="border-background/10 bg-background/5">
-                  <Button type="button" size="lg" className="h-12 w-full" onClick={nextDay}>
+                <CardFooter className="border-background/10 bg-background/[0.045]">
+                  <Button type="button" size="lg" className="h-13 w-full rounded-full bg-background text-foreground hover:bg-background/90" onClick={nextDay}>
                     {day.number === 7 ? 'See my week' : 'Start day ' + (day.number + 1)}
                     <ArrowRight data-icon="inline-end" aria-hidden="true" />
                   </Button>
@@ -1004,17 +1014,17 @@ export default function Home() {
         )}
 
         {view === 'week' && (
-          <section aria-labelledby="week-title" className="space-y-5 px-4 pt-5 sm:px-0">
+          <section aria-labelledby="week-title" className="soul-rise space-y-7 px-4 pt-9 sm:px-0 sm:pt-12">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">Your sprint</p>
-              <h1 id="week-title" className="mt-1 font-heading text-3xl font-semibold tracking-[-0.035em]">Seven days. One deal brain.</h1>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.19em] text-primary">Your listening room</p>
+              <h1 id="week-title" className="mt-2 max-w-[12ch] font-heading text-[2.8rem] font-semibold leading-[0.95] tracking-[-0.055em] sm:text-6xl">Seven days.<br />One deal brain.</h1>
+              <p className="mt-4 max-w-[46ch] text-[15px] leading-relaxed text-muted-foreground">
                 Take the days in order or jump to the problem on your desk. Each session is under ten minutes.
               </p>
             </div>
-            <Card size="sm">
-              <CardContent className="flex items-center gap-4">
-                <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-primary text-lg font-semibold text-primary-foreground">
+            <Card size="sm" className="soul-card rounded-[1.6rem] border border-white/60 bg-card/82 py-4 ring-1 ring-foreground/7 backdrop-blur-xl">
+              <CardContent className="flex items-center gap-4 px-4">
+                <span className="grid size-14 shrink-0 place-items-center rounded-full bg-foreground text-lg font-semibold text-background shadow-lg">
                   {progress.completed.length}/7
                 </span>
                 <div className="min-w-0 flex-1">
@@ -1022,14 +1032,14 @@ export default function Home() {
                     <p className="font-semibold">Course progress</p>
                     <span className="text-xs font-semibold tabular-nums">{coursePercent}%</span>
                   </div>
-                  <Progress value={coursePercent} aria-label="Course progress" className="mt-2" />
+                  <Progress value={coursePercent} aria-label="Course progress" className="mt-2 [&_[data-slot=progress-track]]:h-1.5 [&_[data-slot=progress-track]]:bg-foreground/8 [&_[data-slot=progress-indicator]]:bg-primary" />
                   <p className="mt-2 text-xs text-muted-foreground">
                     {overallScore === null ? 'Start Day 1 to set your baseline.' : overallScore + '% average across attempted days.'}
                   </p>
                 </div>
               </CardContent>
             </Card>
-            <div className="space-y-2">
+            <div className="space-y-2.5">
               {days.map((item) => {
                 const isDone = progress.completed.includes(item.number);
                 const score = scoreForDay(item, progress);
@@ -1039,17 +1049,17 @@ export default function Home() {
                     key={item.number}
                     type="button"
                     onClick={() => openDay(item.number)}
-                    className="flex w-full items-center gap-3 rounded-xl border border-border bg-card p-3 text-left shadow-sm transition-colors hover:bg-muted/45 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                    className="group flex w-full items-center gap-3.5 rounded-[1.4rem] border border-white/60 bg-card/76 p-3.5 text-left shadow-[0_12px_30px_-28px_var(--foreground)] ring-1 ring-foreground/6 backdrop-blur-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-card hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                   >
                     <span className={cn(
-                      'grid size-10 shrink-0 place-items-center rounded-xl text-sm font-semibold',
-                      isDone ? 'bg-accent text-accent-foreground' : attempted ? 'bg-secondary text-secondary-foreground' : 'bg-muted text-muted-foreground',
+                      'grid size-11 shrink-0 place-items-center rounded-full text-sm font-semibold transition-transform duration-300 group-hover:scale-105',
+                      isDone ? 'bg-accent text-accent-foreground' : attempted ? 'bg-primary/12 text-primary' : 'bg-foreground/6 text-muted-foreground',
                     )}>
                       {isDone ? <Check aria-hidden="true" className="size-4" /> : item.number}
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="block text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">{item.field} • {item.minutes} min</span>
-                      <span className="mt-0.5 block font-heading font-semibold">{item.shortTitle}</span>
+                      <span className="mt-0.5 block font-heading font-semibold tracking-[-0.02em]">{item.shortTitle}</span>
                     </span>
                     <span className="text-right">
                       {score !== null && <span className="block text-xs font-semibold tabular-nums">{score}%</span>}
@@ -1063,53 +1073,53 @@ export default function Home() {
         )}
 
         {view === 'kit' && (
-          <section aria-labelledby="kit-title" className="space-y-5 px-4 pt-5 sm:px-0">
+          <section aria-labelledby="kit-title" className="soul-rise space-y-7 px-4 pt-9 sm:px-0 sm:pt-12">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">Pocket reference</p>
-              <h1 id="kit-title" className="mt-1 font-heading text-3xl font-semibold tracking-[-0.035em]">Your field kit</h1>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">The minimum viable deal desk—designed for a phone screen.</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.19em] text-primary">Pocket reference</p>
+              <h1 id="kit-title" className="mt-2 font-heading text-[2.8rem] font-semibold leading-[0.95] tracking-[-0.055em] sm:text-6xl">Your field kit.</h1>
+              <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">The minimum viable deal desk—quietly ready when the call comes.</p>
             </div>
 
             <div className="grid gap-3 sm:grid-cols-2">
-              <Card size="sm">
+              <Card size="sm" className="soul-card rounded-[1.6rem] border border-white/60 bg-foreground text-background ring-0">
                 <CardHeader>
-                  <span className="mb-1 grid size-9 place-items-center rounded-xl bg-primary/10 text-primary"><Music2 aria-hidden="true" className="size-4" /></span>
-                  <CardTitle>Master</CardTitle>
-                  <CardDescription>The exact recorded performance. Usually cleared with the recording owner.</CardDescription>
+                  <span className="mb-2 grid size-10 place-items-center rounded-full bg-primary text-primary-foreground shadow-lg"><Music2 aria-hidden="true" className="size-4" /></span>
+                  <CardTitle className="text-xl font-semibold text-background">Master</CardTitle>
+                  <CardDescription className="leading-relaxed text-background/62">The exact recorded performance. Usually cleared with the recording owner.</CardDescription>
                 </CardHeader>
               </Card>
-              <Card size="sm">
+              <Card size="sm" className="soul-card rounded-[1.6rem] border border-white/60 bg-card/84 ring-1 ring-foreground/7 backdrop-blur-xl">
                 <CardHeader>
-                  <span className="mb-1 grid size-9 place-items-center rounded-xl bg-accent text-accent-foreground"><BookOpenText aria-hidden="true" className="size-4" /></span>
-                  <CardTitle>Composition</CardTitle>
-                  <CardDescription>The music and lyrics. Clear every required publisher/writer share.</CardDescription>
+                  <span className="mb-2 grid size-10 place-items-center rounded-full bg-accent text-accent-foreground shadow-sm ring-1 ring-white/70"><BookOpenText aria-hidden="true" className="size-4" /></span>
+                  <CardTitle className="text-xl font-semibold">Composition</CardTitle>
+                  <CardDescription className="leading-relaxed">The music and lyrics. Clear every required publisher/writer share.</CardDescription>
                 </CardHeader>
               </Card>
             </div>
 
-            <Card>
+            <Card className="soul-card rounded-[1.7rem] border border-white/60 bg-card/82 ring-1 ring-foreground/7 backdrop-blur-xl [--card-spacing:--spacing(5)]">
               <CardHeader>
-                <Badge variant="outline">Copy + customize</Badge>
-                <CardTitle>Clearance request skeleton</CardTitle>
-                <CardDescription>Send the same complete scope to master and publishing contacts.</CardDescription>
+                <Badge variant="outline" className="rounded-full border-foreground/10 bg-background/65">Copy + customize</Badge>
+                <CardTitle className="pt-1 text-2xl font-semibold tracking-[-0.035em]">Clearance request skeleton</CardTitle>
+                <CardDescription className="leading-relaxed">Send the same complete scope to master and publishing contacts.</CardDescription>
                 <CardAction>
-                  <Button type="button" variant="ghost" size="icon" aria-label="Copy request template" onClick={copyRequest}>
+                  <Button type="button" variant="ghost" size="icon" className="rounded-full" aria-label="Copy request template" onClick={copyRequest}>
                     {copied ? <Check aria-hidden="true" /> : <Clipboard aria-hidden="true" />}
                   </Button>
                 </CardAction>
               </CardHeader>
               <CardContent>
-                <pre className="overflow-x-auto whitespace-pre-wrap rounded-xl bg-muted p-3 font-mono text-xs leading-relaxed text-muted-foreground">{requestTemplate}</pre>
+                <pre className="overflow-x-auto whitespace-pre-wrap rounded-[1.2rem] bg-foreground p-4 font-mono text-xs leading-relaxed text-background/70 shadow-inner">{requestTemplate}</pre>
               </CardContent>
-              <CardFooter>
-                <Button type="button" variant="outline" className="w-full" onClick={copyRequest}>
+              <CardFooter className="border-foreground/6 bg-foreground/[0.025]">
+                <Button type="button" className="h-11 w-full rounded-full bg-foreground text-background hover:bg-foreground/88" onClick={copyRequest}>
                   {copied ? 'Copied' : 'Copy request'} {copied ? <Check data-icon="inline-end" aria-hidden="true" /> : <Clipboard data-icon="inline-end" aria-hidden="true" />}
                 </Button>
               </CardFooter>
             </Card>
 
             <div className="space-y-2">
-              <h2 className="font-heading text-lg font-semibold">Deal order of operations</h2>
+              <h2 className="pb-1 font-heading text-2xl font-semibold tracking-[-0.035em]">The order of operations.</h2>
               {[
                 ['1', 'Brief', 'Story, audience, timing, lyrics, deadline and ceiling'],
                 ['2', 'Map', 'Master owner, 100% publishing, samples and approvals'],
@@ -1117,8 +1127,8 @@ export default function Home() {
                 ['4', 'Money', 'Master + aggregate publishing basis, MFN, cap and contingency'],
                 ['5', 'Close', 'Written evidence, payment, assets, cue data and future dates'],
               ].map(([number, title, text]) => (
-                <div key={number} className="flex gap-3 rounded-xl border border-border/70 bg-card/70 p-3">
-                  <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-secondary text-xs font-semibold">{number}</span>
+                <div key={number} className="flex gap-3.5 rounded-[1.2rem] border border-white/60 bg-card/68 p-3.5 ring-1 ring-foreground/5 backdrop-blur-lg">
+                  <span className="grid size-9 shrink-0 place-items-center rounded-full bg-foreground text-xs font-semibold text-background">{number}</span>
                   <div>
                     <p className="text-sm font-semibold">{title}</p>
                     <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">{text}</p>
@@ -1127,7 +1137,7 @@ export default function Home() {
               ))}
             </div>
 
-            <Card size="sm">
+            <Card size="sm" className="rounded-[1.5rem] border border-primary/10 bg-primary/[0.055] ring-1 ring-primary/8">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2"><Scale aria-hidden="true" className="size-4 text-primary" /> Legal reality check</CardTitle>
                 <CardDescription>
@@ -1141,18 +1151,18 @@ export default function Home() {
               </CardContent>
             </Card>
 
-            <Button type="button" variant="ghost" className="w-full text-muted-foreground" onClick={resetProgress}>
+            <Button type="button" variant="ghost" className="h-11 w-full rounded-full text-muted-foreground" onClick={resetProgress}>
               <RotateCcw data-icon="inline-start" aria-hidden="true" /> Reset all progress
             </Button>
           </section>
         )}
       </div>
 
-      <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card/94 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur-xl sm:static sm:mx-auto sm:mt-8 sm:max-w-xl sm:rounded-2xl sm:border sm:p-2 sm:shadow-sm" aria-label="Main navigation">
-        <div className="mx-auto grid max-w-xl grid-cols-3 gap-1">
-          <NavButton active={view === 'today'} onClick={() => setView('today')} icon={HomeIcon} label="Today" />
-          <NavButton active={view === 'week'} onClick={() => setView('week')} icon={Library} label="Week" />
-          <NavButton active={view === 'kit'} onClick={() => setView('kit')} icon={BriefcaseBusiness} label="Field kit" />
+      <nav className="soul-glass fixed bottom-[max(0.75rem,env(safe-area-inset-bottom))] left-1/2 z-30 w-[calc(100%-1.5rem)] max-w-sm -translate-x-1/2 rounded-full border border-white/60 p-1.5 ring-1 ring-foreground/7" aria-label="Main navigation">
+        <div className="grid grid-cols-3 gap-1">
+          <NavButton active={view === 'today'} onClick={() => openView('today')} icon={HomeIcon} label="Today" />
+          <NavButton active={view === 'week'} onClick={() => openView('week')} icon={Library} label="Week" />
+          <NavButton active={view === 'kit'} onClick={() => openView('kit')} icon={BriefcaseBusiness} label="Field kit" />
         </div>
       </nav>
     </main>
@@ -1176,8 +1186,8 @@ function NavButton({
       onClick={onClick}
       aria-current={active ? 'page' : undefined}
       className={cn(
-        'flex min-h-12 flex-col items-center justify-center gap-0.5 rounded-xl text-xs font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:min-h-10 sm:flex-row sm:gap-2',
-        active ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+        'flex min-h-11 items-center justify-center gap-1.5 rounded-full px-2 text-xs font-semibold transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+        active ? 'bg-foreground text-background shadow-md' : 'text-muted-foreground hover:bg-background/70 hover:text-foreground',
       )}
     >
       <Icon aria-hidden="true" className="size-4" />

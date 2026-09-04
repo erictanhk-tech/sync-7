@@ -1,16 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { DM_Sans, Space_Grotesk } from 'next/font/google';
 import './globals.css';
-
-const dmSans = DM_Sans({
-  variable: '--font-dm-sans',
-  subsets: ['latin'],
-});
-
-const spaceGrotesk = Space_Grotesk({
-  variable: '--font-space-grotesk',
-  subsets: ['latin'],
-});
 
 const productionHost = process.env.VERCEL_PROJECT_PRODUCTION_URL;
 const metadataBase = new URL(productionHost ? `https://${productionHost}` : 'http://localhost:3001');
@@ -19,6 +8,9 @@ export const metadata: Metadata = {
   metadataBase,
   title: 'SYNC / 7 — Music Supervision Deal Sprint',
   description: 'Learn to clear and negotiate music deals in seven bite-size daily sessions.',
+  icons: {
+    icon: '/favicon.svg',
+  },
   openGraph: {
     title: 'SYNC / 7',
     description: 'Music Supervision Deal Sprint',
@@ -36,13 +28,13 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#f4efe3',
+  themeColor: '#f7f5f1',
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${dmSans.variable} ${spaceGrotesk.variable} antialiased`}>{children}</body>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }
